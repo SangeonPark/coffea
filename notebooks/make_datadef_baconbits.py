@@ -14,8 +14,8 @@ uproot_xrootd_opts = dict(chunkbytes=30*1024, limitbytes=20*(1024**2))
 fnaleos = "root://cmseos.fnal.gov/"
 dazsle_root = "/eos/uscms/store/user/lpcbacon/dazsle/zprimebits-v15.01"
 #patterns = ["QCD*", "WJets*", "ZJets*", "GluGluHToBB*LHEHpT*", "GluGluHToCC*LHEHpT*", "TTTo*"]
-patterns = ["WJetsToLNu*"]
-getentries = True
+patterns = ["QCD*","GluGluHToBB*LHEHpT*"]
+getentries = False
 
 def read_xsections(filename):
     out = {}
@@ -97,6 +97,6 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
             'xs': xs,
         }
 
-with open("data/datadef_wlnu.json", "w") as fout:
+with open("metadata/datadef_reoptimization.json", "w") as fout:
     json.dump(datadef, fout, indent=4)
 

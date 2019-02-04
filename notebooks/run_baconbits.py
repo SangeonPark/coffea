@@ -12,7 +12,7 @@ import uproot
 import numpy as np
 from fnal_column_analysis_tools import hist, lookup_tools
 
-with open("metadata/datadef.json") as fin:
+with open("metadata/datadef_reoptimization.json") as fin:
     datadef = json.load(fin)
 
 extractor = lookup_tools.extractor()
@@ -48,10 +48,11 @@ for i,v in enumerate(gencat.identifiers()):
 
 jetpt = hist.Bin("AK8Puppijet0_pt", "Jet $p_T$", [450, 500, 550, 600, 675, 800, 1000])
 jetpt_coarse = hist.Bin("AK8Puppijet0_pt", "Jet $p_T$", [450, 800])
+
 jetmass = hist.Bin("AK8Puppijet0_msd", "Jet $m_{sd}$", 23, 40, 201)
 jetmass_coarse = hist.Bin("AK8Puppijet0_msd", "Jet $m_{sd}$", [40, 100, 140, 200])
-jetrho = hist.Bin("jetrho", r"Jet $\rho$", 13, -6, -2.1)
-doubleb = hist.Bin("AK8Puppijet0_deepdoubleb", "Double-b", 20, 0., 1)
+jetrho = hist.Bin("jetrho", r"Jet $\rho$", 52, -6, -2.1)
+doubleb = hist.Bin("AK8Puppijet0_deepdoubleb", "Double-b", 40, 0., 1)
 doublec = hist.Bin("AK8Puppijet0_deepdoublec", "Double-c", 20, 0., 1.)
 doublecvb = hist.Bin("AK8Puppijet0_deepdoublecvb", "Double-cvb", 20, 0., 1.)
 doubleb_coarse = [1., 0.93, 0.92, 0.89, 0.85, 0.7]
@@ -64,9 +65,7 @@ n2ddt = hist.Bin("AK8Puppijet0_N2sdb1_ddt", "N2 DDT", 20, -0.25, 0.25)
 n2ddt_coarse = hist.Bin("AK8Puppijet0_N2sdb1_ddt", "N2 DDT", [-0.1, 0.])
 
 hists = {}
-hists['hjetpt'] = hist.Hist("Events", dataset, gencat, hist.Bin("AK8Puppijet0_pt", "Jet $p_T$", 100, 300, 1300), dtype='f')
-hists['htagtensor'] = hist.Hist("Events", dataset, gencat, jetpt_coarse, n2ddt_coarse, jetmass_coarse, doubleb, doublec, doublecvb, dtype='f')
-hists['hsculpt'] = hist.Hist("Events", dataset, gencat, jetpt, jetmass, n2ddt, doubleb_coarse, doublec_coarse, doublecvb_coarse, dtype='f')
+hists['hjetpt'] = hist.Hist("Events", dataset, gencat, hist.Bin("AK8Puppijet0_pt", "Jet $p_T$", 60, 400, 1000),jetrho,hist.Bin("AK8Puppijet0_N2sdb1", "N2", 50, 0, 1), doubleb, dtype='f')
 
 branches = [
     "AK8Puppijet0_pt",
@@ -143,6 +142,6 @@ print("Filled %.1fM bins" % (nbins/1e6, ))
 print("Nonzero bins: %.1f%%" % (100*nfilled/nbins, ))
 
 # Pickle is not very fast or memory efficient, will be replaced by something better soon
-with gzip.open("hists.pkl.gz", "wb") as fout:
+with gzip.open("hists_reoptimization.pkl.gz", "wb") as fout:
     pickle.dump(hists, fout)
 
