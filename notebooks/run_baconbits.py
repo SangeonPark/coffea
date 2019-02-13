@@ -65,7 +65,7 @@ n2ddt = hist.Bin("AK8Puppijet0_N2sdb1_ddt", "N2 DDT", 20, -0.25, 0.25)
 n2ddt_coarse = hist.Bin("AK8Puppijet0_N2sdb1_ddt", "N2 DDT", [-0.1, 0.])
 
 hists = {}
-hists['hjetpt'] = hist.Hist("Events", dataset, gencat, hist.Bin("AK8Puppijet0_pt", "Jet $p_T$", 60, 400, 1000),jetrho,hist.Bin("AK8Puppijet0_N2sdb1", "N2", 50, 0, 1), doubleb, dtype='f')
+hists['hjetpt'] = hist.Hist("Events", dataset, gencat, hist.Bin("AK8Puppijet0_pt", "Jet $p_T$", 60, 400, 1000),jetrho,hist.Bin("AK8Puppijet0_N2sdb1", "N2", 100, 0, 0.5), doubleb, dtype='f')
 
 branches = [
     "AK8Puppijet0_pt",
@@ -142,6 +142,6 @@ print("Filled %.1fM bins" % (nbins/1e6, ))
 print("Nonzero bins: %.1f%%" % (100*nfilled/nbins, ))
 
 # Pickle is not very fast or memory efficient, will be replaced by something better soon
-with gzip.open("hists_reoptimization.pkl.gz", "wb") as fout:
+with gzip.open("hists_reoptimization_finern2.pkl.gz", "wb") as fout:
     pickle.dump(hists, fout)
 

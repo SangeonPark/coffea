@@ -7,12 +7,12 @@ import pickle
 import json
 import time
 import numexpr
-
+import pdb, traceback, sys
 import uproot
 import numpy as np
 from fnal_column_analysis_tools import hist, lookup_tools
 
-with open("metadata/datadef_qcd.json") as fin:
+with open("metadata/datadef_sig.json") as fin:
     datadef = json.load(fin)
 
 extractor = lookup_tools.extractor()
@@ -67,9 +67,9 @@ n2ddt_coarse = hist.Bin("AK8Puppijet0_N2sdb1_ddt", "N2 DDT", [-0.1, 0.])
 
 
 hists = {}
-hists['hjetpt'] = hist.Hist("Events", dataset, gencat, hist.Bin("AK8Puppijet0_pt", "Jet $p_T$", 60, 400, 1000),jetrho, hist.Bin("N2quantile", "N2quantile", 50, 0, 1), doubleb, dtype='f')
+hists['hjetpt'] = hist.Hist("Events", dataset, gencat, hist.Bin("AK8Puppijet0_pt", "Jet $p_T$", 60, 400, 1000),jetrho, hist.Bin("N2quantile", "N2quantile", 5, 0, 1), doubleb, dtype='f')
 
-with gzip.open("n2quantile_QCD.pkl.gz") as fin:
+with gzip.open("n2quantile_HBB.pkl.gz") as fin:
     n2hist = pickle.load(fin)
 # n2hist being a 3d hist of pt, rho, n2
 # which has its values replaced by the appropriate cumsum
@@ -103,6 +103,7 @@ tstart = time.time()
 for h in hists.values(): h.clear()
 nevents = defaultdict(lambda: 0.)
 
+#np.set_printoptions(threshold=np.nan)
 
 def processfile(dataset, file):
     # Many 'invalid value encountered in ...' due to pt and msd sometimes being zero
@@ -111,7 +112,7 @@ def processfile(dataset, file):
     arrays = tree.arrays(branches, namedecode='ascii')
     arrays["AK8Puppijet0_msd"] *= msd_weight(arrays["AK8Puppijet0_pt"], arrays["AK8Puppijet0_eta"])
     arrays["jetrho"] = 2*np.log(arrays["AK8Puppijet0_msd"]/arrays["AK8Puppijet0_pt"])
-    arrays["AK8Puppijet0_N2sdb1_ddt"] = arrays["AK8Puppijet0_N2sdb1"] - n2ddt_rho_pt(arrays["jetrho"], arrays["AK8Puppijet0_pt"])
+    #arrays["AK8Puppijet0_N2sdb1_ddt"] = arrays["AK8Puppijet0_N2sdb1"] - n2ddt_rho_pt(arrays["jetrho"], arrays["AK8Puppijet0_pt"])
     arrays["N2quantile"] = evaluator["N2quantile"](arrays["AK8Puppijet0_pt"],arrays["jetrho"],arrays["AK8Puppijet0_N2sdb1"])
     hout = {}
     for k in hists.keys():
@@ -163,6 +164,6 @@ print("Filled %.1fM bins" % (nbins/1e6, ))
 print("Nonzero bins: %.1f%%" % (100*nfilled/nbins, ))
 
 # Pickle is not very fast or memory efficient, will be replaced by something better soon
-with gzip.open("hists_quantile_qcd.pkl.gz", "wb") as fout:
+with gzip.open("hists_quantile_hbb.pkl.gz", "wb") as fout:
     pickle.dump(hists, fout)
 
