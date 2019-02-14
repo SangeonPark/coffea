@@ -12,7 +12,7 @@ import uproot
 import numpy as np
 from fnal_column_analysis_tools import hist, lookup_tools
 
-with open("metadata/datadef_qcd.json") as fin:
+with open("metadata/datadef_sig.json") as fin:
     datadef = json.load(fin)
 
 extractor = lookup_tools.extractor()
@@ -67,7 +67,7 @@ n2ddt_coarse = hist.Bin("AK8Puppijet0_N2sdb1_ddt", "N2 DDT", [-0.1, 0.])
 
 
 hists = {}
-hists['hjetpt'] = hist.Hist("Events", dataset, gencat, jetmass, hist.Bin("AK8Puppijet0_pt", "Jet $p_T$", 60, 400, 1000),jetrho, hist.Bin("N2quantile", "N2quantile", 50, 0, 1), doubleb, dtype='f')
+hists['hjetpt'] = hist.Hist("Events", dataset, gencat, jetmass, hist.Bin("AK8Puppijet0_pt", "Jet $p_T$", 60, 400, 1000),hist.Bin("N2quantile", "N2quantile", 50, 0, 1), doubleb, dtype='f')
 
 with gzip.open("n2quantile_QCD_finern2.pkl.gz") as fin:
     n2hist = pickle.load(fin)
@@ -164,6 +164,6 @@ print("Filled %.1fM bins" % (nbins/1e6, ))
 print("Nonzero bins: %.1f%%" % (100*nfilled/nbins, ))
 
 # Pickle is not very fast or memory efficient, will be replaced by something better soon
-with gzip.open("hists_quantile_qcd_finern2_withmsd.pkl.gz", "wb") as fout:
+with gzip.open("hists_quantile_hbb_finern2_withmsd.pkl.gz", "wb") as fout:
     pickle.dump(hists, fout)
 
