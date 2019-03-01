@@ -63,11 +63,14 @@ doublecvb_coarse = [0.93, 0.91, 0.86, 0.76, 0.6, 0.17, 0.12]
 doublecvb_coarse = hist.Bin("AK8Puppijet0_deepdoublecvb", "Double-cvb", doublecvb_coarse[::-1])
 n2ddt = hist.Bin("AK8Puppijet0_N2sdb1_ddt", "N2 DDT", 20, -0.25, 0.25)
 n2ddt_coarse = hist.Bin("AK8Puppijet0_N2sdb1_ddt", "N2 DDT", [-0.1, 0.])
+doublecsv = hist.Bin("AK8Puppijet0_doublecsv", "doublecsv", 80, -1., 1.)
+
 
 
 
 hists = {}
-hists['hjetpt'] = hist.Hist("Events", dataset, gencat, jetmass, hist.Bin("AK8Puppijet0_pt", "Jet $p_T$", 60, 400, 1000),hist.Bin("N2quantile", "N2quantile", 50, 0, 1), doubleb, dtype='f')
+#hists['hjetpt'] = hist.Hist("Events", dataset, gencat, jetmass, hist.Bin("AK8Puppijet0_pt", "Jet $p_T$", 60, 400, 1000),hist.Bin("N2quantile", "N2quantile", 50, 0, 1), doubleb, dtype='f')
+hists['hjetpt'] = hist.Hist("Events", dataset, gencat, jetmass, hist.Bin("AK8Puppijet0_pt", "Jet $p_T$", 60, 400, 1000),hist.Bin("N2quantile", "N2quantile", 50, 0, 1), doublecsv, dtype='f')
 
 with gzip.open("n2quantile_QCD_finern2.pkl.gz") as fin:
     n2hist = pickle.load(fin)
