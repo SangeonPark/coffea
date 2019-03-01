@@ -12,7 +12,7 @@ import uproot
 import numpy as np
 from fnal_column_analysis_tools import hist, lookup_tools
 
-with open("metadata/datadef_sig.json") as fin:
+with open("metadata/datadef_qcd.json") as fin:
     datadef = json.load(fin)
 
 extractor = lookup_tools.extractor()
@@ -98,6 +98,7 @@ branches = [
     "AK8Puppijet0_deepdoublec",
     "AK8Puppijet0_deepdoublecvb",
     "AK8Puppijet0_N2sdb1",
+    "AK8Puppijet0_doublecsv",
 ]
 
 tstart = time.time()
@@ -167,6 +168,6 @@ print("Filled %.1fM bins" % (nbins/1e6, ))
 print("Nonzero bins: %.1f%%" % (100*nfilled/nbins, ))
 
 # Pickle is not very fast or memory efficient, will be replaced by something better soon
-with gzip.open("hists_quantile_hbb_finern2_withmsd.pkl.gz", "wb") as fout:
+with gzip.open("hists_quantile_qcd_doublecsv.pkl.gz", "wb") as fout:
     pickle.dump(hists, fout)
 
